@@ -1,0 +1,75 @@
+---
+title: Clean alignment 6 data
+author: Shir Dekel
+date: '`r format(Sys.time())`'
+output_format: html_document
+---
+
+Load packages and functions
+
+```{r}
+source(DataPackageR::project_path("packages.R"))
+project_path("R") %>%
+  list.files(full.names = TRUE) %>%
+  lapply(source)
+```
+
+Clean data
+
+```{r}
+data_raw <-
+  project_extdata_path("qualtrics") %>%
+  list.files(full.names = TRUE) %>%
+  map_dfr(~ .x %>%
+    read_csv(col_types = cols()))
+
+dvName <- c("ranking", "allocation")
+
+data_prolific <-
+  data_raw %>%
+  shirthesis::clean_prolific()
+
+data <-
+  dvName %>%
+  map(
+    ~ select(data_prolific,
+      contains(.x),
+      variance,
+      hint,
+      "sex" = "Q25",
+      "age" = "Q27"
+    ) %>%
+      mutate(id = row_number()) %>%
+      pivot_longer(
+        cols = -(variance:id),
+        names_to = c("project"),
+        names_prefix = "\\w*_",
+        values_to = .x,
+        values_drop_na = TRUE
+      )
+  ) %>%
+  reduce(left_join, by = c("variance", "hint", "sex", "age", "id", "project")) %>%
+  mutate(
+    variance = recode(variance, "1" = "Low", "2" = "High"),
+    hint = recode(hint,
+      "1" = "No Hint", "2" = "Salience Only",
+      "3" = "Hint + Salience"
+    ),
+    npv_amount = case_when(
+      project == 1 ~ "700",
+      project == 2 ~ "500",
+      project == 3 ~ "100",
+      project == 4 ~ "900",
+      project == 5 ~ "300"
+    ),
+    id = as.factor(id),
+    across(c(all_of(dvName), npv_amount, age), as.numeric),
+  ) %>%
+  mutate_if(is.character, as.factor) %>%
+  mutate(
+    sex = as.character(sex),
+    sample = "prolific"
+  ) %>%
+  shirthesis::get_max_min_difference(npv_amount, variance, hint)
+```
+
