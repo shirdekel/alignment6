@@ -1,10 +1,10 @@
 #' alignment6
-#' A data package for alignment6.
+#' A data package for the Alignment 6 experiment.
 #' @docType package
 #' @aliases alignment6-package
-#' @title Package Title
+#' @title Alignment 6 experiment
 #' @name alignment6
-#' @description A description of the data package
+#' @description Data and materials for the Alignment 6 experiment.
 #' @details Use \code{data(package='alignment6')$results[, 3]} to see a list of available data sets in this data package
 #'     and/or DataPackageR::load_all
 #' _datasets() to load them.
@@ -34,7 +34,7 @@ NULL
 #' \item{min_npv}{}
 #' \item{max_min_difference}{}
 #' }
-#' @source The data comes from________________________.
+#' @source The data was collected using Qualtrics.
 #' @seealso
 #' \link{alignment6}
 NULL

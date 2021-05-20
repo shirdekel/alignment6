@@ -166,21 +166,27 @@ pre code {
 
 <h1 class="title toc-ignore">Clean alignment 6 data</h1>
 <h4 class="author">Shir Dekel</h4>
-<h4 class="date">2021-05-17 18:44:05</h4>
+<h4 class="date">2021-05-19 13:04:20</h4>
 
 </div>
 
 
 <p>Load packages and functions</p>
 <pre class="r"><code>source(DataPackageR::project_path(&quot;packages.R&quot;))</code></pre>
-<pre><code>## [conflicted] Removing existing preference</code></pre>
+<pre><code>## • {drake} is superseded: https://books.ropensci.org/targets/drake.html
+## • Consider {targets} instead: https://docs.ropensci.org/targets/
+## • Effective 2021-01-21</code></pre>
 <pre><code>## [conflicted] Will prefer dplyr::filter over any other package</code></pre>
-<pre><code>## [conflicted] Removing existing preference</code></pre>
 <pre><code>## [conflicted] Will prefer purrr::flatten over any other package</code></pre>
 <pre class="r"><code>project_path(&quot;R&quot;) %&gt;%
   list.files(full.names = TRUE) %&gt;%
   lapply(source)</code></pre>
-<pre><code>## list()</code></pre>
+<pre><code>## [[1]]
+## [[1]]$value
+## NULL
+## 
+## [[1]]$visible
+## [1] TRUE</code></pre>
 <p>Clean data</p>
 <pre class="r"><code>data_raw &lt;-
   project_extdata_path(&quot;qualtrics&quot;) %&gt;%
